@@ -1,6 +1,5 @@
 import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
-import { getAuth } from "firebase/auth";
 import Constants from "expo-constants";
 
 if (!Constants.expoConfig?.extra?.apiKey) {
@@ -21,4 +20,3 @@ const app: FirebaseApp = getApps().length === 0
   : getApp();
 
 export const firestore = getFirestore(app);
-export const auth = getAuth(app);
