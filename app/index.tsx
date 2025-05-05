@@ -1,10 +1,5 @@
-import { Stack } from 'expo-router';
-import { Text, View } from 'react-native';
+import WelcomeScreen from '../presentation/screens/WelcomeScreen';
 
 export default function Index() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Bienvenida a la app</Text>
-    </View>
-  );
+  return <WelcomeScreen />;
 }
