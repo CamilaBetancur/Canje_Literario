@@ -4,12 +4,14 @@ import { useRouter } from 'expo-router';
 import CustomButton from '../../presentation/components/CustomButton';
 import { Image } from 'expo-image';
 import lam from '../../assets/images/logocanje.png'; 
+import fondo from '../../assets/images/fondooo.jpg';
 
 const WelcomeScreen = () => {
   const router = useRouter();
 
   return (
     <View style={styles.container}>
+      <Image source={fondo} style={{ width: '100%', height: '100%' }} />
       <Image source={lam} style={styles.logocanje} contentFit="contain" />
       <Text style={styles.subtitle}>
         Intercambia, descubre y conecta con lectores como tú.
