@@ -1,25 +1,28 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router';
-import CustomButton from '../../presentation/components/CustomButton';
 import { Image } from 'expo-image';
-import lam from '../../assets/images/logocanje.png'; 
+import { useRouter } from 'expo-router';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import fondo from '../../assets/images/fondooo.jpg';
+import lam from '../../assets/images/logocanje.png';
+import CustomButton from '../../presentation/components/CustomButton';
 
 const WelcomeScreen = () => {
   const router = useRouter();
 
   return (
     <View style={styles.container}>
-      <Image source={fondo} style={{ width: '100%', height: '100%' }} />
-      <Image source={lam} style={styles.logocanje} contentFit="contain" />
-      <Text style={styles.subtitle}>
-        Intercambia, descubre y conecta con lectores como tú.
-        {'\n'}¡Tu próxima historia ya está en otra estantería!
-      </Text>
+      <Image source={fondo} style={StyleSheet.absoluteFillObject} contentFit="cover" />
 
-      <CustomButton title="Iniciar Sesión" colorbg="#FFA500" onPress={() => router.push('/login')} />
-      <CustomButton title="Registrarse" colorbg="#FFA500" onPress={() => router.push('/register')} />
+      <View style={styles.content}>
+        <Image source={lam} style={styles.logocanje} contentFit="contain" />
+        <Text style={styles.subtitle}>
+          Intercambia, descubre y conecta con lectores como tú.
+          {'\n'}¡Tu próxima historia ya está en otra estantería!
+        </Text>
+
+        <CustomButton title="Iniciar Sesión" colorbg="#FFA500" onPress={() => router.push('/login')} />
+        <CustomButton title="Registrarse" colorbg="#FFA500" onPress={() => router.push('/register')} />
+      </View>
     </View>
   );
 };
@@ -29,10 +32,12 @@ export default WelcomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  content: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#ffffff',
   },
   subtitle: {
     textAlign: 'center',
