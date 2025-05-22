@@ -29,6 +29,9 @@ export default function LoginScreen() {
         <Text style={styles.welcome}>Hola!</Text>
         <Text style={styles.subwelcome}>Inicia sesión para descubrir nuevas lecturas, conectar con otros lectores y darles nueva vida a tus libros.</Text>
         <Image source={require('../../assets/images/plant.png')} style={styles.plantImage} />
+        <TouchableOpacity onPress={() => router.back()}>
+          <Text style={styles.back}>◀ Regresar</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.formContainer}>
@@ -52,9 +55,9 @@ export default function LoginScreen() {
           secureTextEntry
         />
 
-        <TouchableOpacity onPress={() => {}}>
+        {/*<TouchableOpacity onPress={() => {}}>
           <Text style={styles.forgot}>¿Olvidaste tu contraseña?</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>*/}
 
         {error !== '' && <Text style={styles.error}>{error}</Text>}
 
@@ -91,6 +94,11 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     alignItems: 'left',
+  },
+  back: {
+    marginBottom: 20,
+    fontSize: 14,
+    color: 'white',
   },
   subwelcome: {
     color: 'white',
