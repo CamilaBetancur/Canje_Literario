@@ -1,7 +1,12 @@
-import { createUser } from '../../infraestructure/adapters/userAdapter';
+import { createUser, userExists } from '../../infraestructure/adapters/userAdapter';
 import bcrypt from 'bcryptjs';
 
-export const registerUserUseCase = async (email: string, fullName: string, password: string, confirmPassword: string) => {
+export const registerUserUseCase = async (
+  email: string, 
+  fullName: string, 
+  password: string, 
+  confirmPassword: string) => {
+
   if (!email || !fullName || !password || !confirmPassword) {
     throw new Error('Todos los campos son obligatorios');
   }
@@ -12,6 +17,11 @@ export const registerUserUseCase = async (email: string, fullName: string, passw
 
   if (password !== confirmPassword) {
     throw new Error('Las contraseñas no coinciden');
+  }
+  
+  const exists = await userExists(email);
+  if (exists) {
+    throw new Error('El correo ya está registrado');
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
