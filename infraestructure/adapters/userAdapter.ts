@@ -1,6 +1,12 @@
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { firestore } from '../config/firebaseConfig';
 
+export const getUserByEmail = async (email: string) => {
+  const userRef = doc(firestore, 'users', email);
+  const userSnap = await getDoc(userRef);
+  return userSnap.exists() ? userSnap.data() : null;
+};
+
 export const userExists = async (email: string): Promise<boolean> => {
   const userRef = doc(firestore, 'users', email);
   const userSnap = await getDoc(userRef);

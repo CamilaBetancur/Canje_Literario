@@ -1,22 +1,10 @@
-import bcrypt from 'bcryptjs';
 import { useRouter } from 'expo-router';
-import { doc, getDoc } from 'firebase/firestore';
 import React, { useState } from 'react';
-import {
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { firestore } from '../../infraestructure/config/firebaseConfig';
+import {Image, KeyboardAvoidingView,Platform,StyleSheet,Text,TextInput,TouchableOpacity,View,} from 'react-native';
+import { loginUserUseCase } from '../../application/usecases/loginUserUseCase';
 
 export default function LoginScreen() {
   const router = useRouter();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -24,31 +12,11 @@ export default function LoginScreen() {
   const handleLogin = async () => {
     setError('');
 
-    if (!email || !password) {
-      setError('Por favor, completa todos los campos');
-      return;
-    }
-
     try {
-      const userRef = doc(firestore, 'users', email);
-      const userSnap = await getDoc(userRef);
-
-      if (!userSnap.exists()) {
-        setError('Credenciales incorrectas');
-        return;
-      }
-
-      const userData = userSnap.data();
-      const isMatch = await bcrypt.compare(password, userData.password);
-
-      if (!isMatch) {
-        setError('Credenciales incorrectas');
-        return;
-      }
-
+      await loginUserUseCase(email, password);
       router.push('/home');
-    } catch (err) {
-      setError('Error al iniciar sesión');
+    } catch (err: any) {
+      setError(err.message);
     }
   };
 
