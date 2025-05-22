@@ -6,6 +6,7 @@ import fondo from '../../assets/images/fondooo.jpg';
 import lam from '../../assets/images/logocanje.png';
 import CustomButton from '../../presentation/components/CustomButton';
 
+
 const WelcomeScreen = () => {
   const router = useRouter();
 
