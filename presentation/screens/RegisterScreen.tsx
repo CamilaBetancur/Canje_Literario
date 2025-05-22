@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { doc, setDoc } from 'firebase/firestore';
-import { firestore } from '../../infraestructure/config/firebaseConfig';
-import bcrypt from 'bcryptjs';
+import { registerUserUseCase } from '../../application/usecases/registerUserUseCase';
+
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -15,37 +14,11 @@ export default function RegisterScreen() {
   const [error, setError] = useState('');
 
   const handleRegister = async () => {
-    // Validaciones
-    if (!email || !fullName || !password || !confirmPassword) {
-      setError('Todos los campos son obligatorios');
-      return;
-    }
-
-    if (!email.endsWith('@campusucc.edu.co')) {
-      setError('El correo debe terminar en @campusucc.edu.co');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError('Las contraseñas no coinciden');
-      return;
-    }
-
     try {
-      // Encriptar contraseña
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      // Guardar en Firestore
-      const newUserRef = doc(firestore, 'users', email);
-      await setDoc(newUserRef, {
-        email,
-        fullName,
-        password: hashedPassword,
-      });
-
+      await registerUserUseCase(email, fullName, password, confirmPassword);
       router.push('/success');
     } catch (err: any) {
-      setError('Error al registrar: ' + err.message);
+      setError(err.message);
     }
   };
 

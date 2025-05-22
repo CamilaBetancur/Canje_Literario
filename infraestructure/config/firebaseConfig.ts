@@ -1,22 +1,31 @@
-import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
-import { getFirestore } from 'firebase/firestore';
 import Constants from "expo-constants";
+import { FirebaseApp, getApp, getApps, initializeApp } from "firebase/app";
+import { Firestore, getFirestore } from "firebase/firestore";
 
-if (!Constants.expoConfig?.extra?.apiKey) {
-  throw new Error("Firebase API Key no está definida en app.config.js");
+interface FirebaseConfig {
+  apiKey: string;
+  authDomain: string;
+  projectId: string;
+  storageBucket: string;
+  messagingSenderId: string;
+  appId: string;
 }
-const firebaseConfig = {
-  apiKey: Constants.expoConfig?.extra.apiKey,
-  authDomain: Constants.expoConfig?.extra.authDomain,
-  projectId: Constants.expoConfig?.extra.projectId,
-  storageBucket: Constants.expoConfig?.extra.storageBucket,
-  messagingSenderId: Constants.expoConfig?.extra.messagingSenderId,
-  appId: Constants.expoConfig?.extra.appId,
-};
 
-//patrón singleton
-const app: FirebaseApp = getApps().length === 0
-  ? initializeApp(firebaseConfig)
-  : getApp();
+let firestore: Firestore | null = null;
 
-export const firestore = getFirestore(app);
+console.log("Config => ", JSON.stringify(Constants.expoConfig));
+
+if (Constants.expoConfig?.extra) {
+  const firebaseConfig: FirebaseConfig = {
+    apiKey: Constants.expoConfig.extra.apiKey,
+    authDomain: Constants.expoConfig.extra.authDomain,
+    projectId: Constants.expoConfig.extra.projectId,
+    storageBucket: Constants.expoConfig.extra.storageBucket,
+    messagingSenderId: Constants.expoConfig.extra.messagingSenderId,
+    appId: Constants.expoConfig.extra.appId,
+  };
+  const app: FirebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+  firestore = getFirestore(app);
+  }
+  
+export { firestore };
