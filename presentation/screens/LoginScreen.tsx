@@ -89,6 +89,11 @@ const styles = StyleSheet.create({
     alignItems: 'left',
     position: 'relative',
   },
+  back: {
+    marginBottom: 20,
+    fontSize: 14,
+    color: 'white',
+  },
   welcome: {
     color: 'white',
     fontSize: 32,
