@@ -10,6 +10,18 @@ import {
   StatusBar,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { doc, setDoc } from 'firebase/firestore';
+import { useState } from 'react';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native';
+import { firestore } from '../../infraestructure/config/firebaseConfig';
 import { registerUserUseCase } from '../../application/usecases/registerUserUseCase';
 
 export default function RegisterScreen() {
@@ -24,6 +36,29 @@ export default function RegisterScreen() {
   const handleRegister = async () => {
     try {
       await registerUserUseCase(email, fullName, password, confirmPassword);
+    if (!email || !fullName || !password || !confirmPassword) {
+      setError('Todos los campos son obligatorios');
+      return;
+    }
+
+    if (!email.endsWith('@campusucc.edu.co')) {
+      setError('El correo debe terminar en @campusucc.edu.co');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Las contraseñas no coinciden');
+      return;
+    }
+
+    try {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const newUserRef = doc(firestore, 'users', email);
+      await setDoc(newUserRef, {
+        email,
+        fullName,
+        password: hashedPassword,
+      });
       router.push('/success');
     } catch (err: any) {
       setError(err.message);
@@ -94,6 +129,14 @@ export default function RegisterScreen() {
         </TouchableOpacity>
       </View>
     </ScrollView>
+        <Text style={styles.signup}>
+          ¿Ya tienes una cuenta?{' '}
+          <Text style={styles.signupLink} onPress={() => router.push('/login')}>
+            Inicia sesión
+          </Text>
+        </Text>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -133,11 +176,44 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  subwelcome: {
+    color: 'white',
+    fontSize: 15,
+    marginTop: 5,
+    marginRight: 80,
+  },
+  plantImage: {
+    width: 180,
+    height: 140,
+    position: 'absolute',
+    right: 70,
+    bottom: -40,
+    zIndex: -1,
+  },
+  formContainer: {
+    backgroundColor: '#fff',
+    marginTop: 60,
+    marginHorizontal: 20,
+    borderRadius: 20,
+    padding: 20,
+    elevation: 4,
+  },
+  loginTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#004D40',
+    marginBottom: 20,
+    textAlign: 'center',
     color: '#004d40',
     textAlign: 'center',
     marginBottom: 20,
   },
   input: {
+    backgroundColor: '#F0F0F0',
+    padding: 15,
+    borderRadius: 12,
+    marginBottom: 10,
     backgroundColor: '#f1f1f1',
     borderRadius: 10,
     paddingHorizontal: 14,
@@ -146,10 +222,17 @@ const styles = StyleSheet.create({
   },
   error: {
     color: 'red',
+    marginBottom: 10,
+    textAlign: 'center',
     marginTop: 10,
     textAlign: 'center',
   },
   button: {
+    backgroundColor: '#00796B',
+    padding: 15,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 10,
     backgroundColor: '#00796b',
     padding: 14,
     borderRadius: 10,
@@ -159,14 +242,22 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
-  footer: {
-    marginTop: 20,
+  signup: {
     textAlign: 'center',
     color: '#333',
   },
   loginLink: {
     fontWeight: 'bold',
     color: '#00796b',
+    marginTop: 20,
+    color: '#555',
+  },
+  signupLink: {
+    color: '#00796B',
+    fontWeight: 'bold',
   },
 });
