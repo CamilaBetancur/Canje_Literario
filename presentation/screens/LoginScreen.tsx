@@ -26,12 +26,13 @@ export default function LoginScreen() {
       style={styles.container}
     >
       <View style={styles.topSection}>
-        <Text style={styles.welcome}>Hola!</Text>
-        <Text style={styles.subwelcome}>Inicia sesión para descubrir nuevas lecturas, conectar con otros lectores y darles nueva vida a tus libros.</Text>
-        <Image source={require('../../assets/images/plant.png')} style={styles.plantImage} />
         <TouchableOpacity onPress={() => router.back()}>
           <Text style={styles.back}>◀ Regresar</Text>
         </TouchableOpacity>
+        <Text style={styles.welcome}>Hola!</Text>
+        <Text style={styles.subwelcome}>Inicia sesión para descubrir nuevas lecturas, conectar con otros lectores y darles nueva vida a tus libros.</Text>
+        <Image source={require('../../assets/images/plant.png')} style={styles.plantImage} />
+        
       </View>
 
       <View style={styles.formContainer}>
