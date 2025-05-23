@@ -1,9 +1,17 @@
-import { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import bcrypt from 'bcryptjs';
 import { useRouter } from 'expo-router';
 import { doc, setDoc } from 'firebase/firestore';
+import { useState } from 'react';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import { firestore } from '../../infraestructure/config/firebaseConfig';
-import bcrypt from 'bcryptjs';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -15,7 +23,6 @@ export default function RegisterScreen() {
   const [error, setError] = useState('');
 
   const handleRegister = async () => {
-    // Validaciones
     if (!email || !fullName || !password || !confirmPassword) {
       setError('Todos los campos son obligatorios');
       return;
@@ -32,17 +39,13 @@ export default function RegisterScreen() {
     }
 
     try {
-      // Encriptar contraseña
       const hashedPassword = await bcrypt.hash(password, 10);
-
-      // Guardar en Firestore
       const newUserRef = doc(firestore, 'users', email);
       await setDoc(newUserRef, {
         email,
         fullName,
         password: hashedPassword,
       });
-
       router.push('/success');
     } catch (err: any) {
       setError('Error al registrar: ' + err.message);
@@ -50,86 +53,171 @@ export default function RegisterScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={() => router.back()}>
-        <Text style={styles.back}>◀ Regresar</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.title}>Registro</Text>
-
-      <Text style={styles.label}>Correo institucional</Text>
-      <TextInput style={styles.input} value={email} onChangeText={setEmail} />
-
-      <Text style={styles.label}>Nombre completo</Text>
-      <TextInput style={styles.input} value={fullName} onChangeText={setFullName} />
-
-      <Text style={styles.label}>Contraseña</Text>
-      <TextInput style={styles.input} secureTextEntry value={password} onChangeText={setPassword} />
-
-      <Text style={styles.label}>Confirmar contraseña</Text>
-      <TextInput style={styles.input} secureTextEntry value={confirmPassword} onChangeText={setConfirmPassword} />
-
-      {error !== '' && <Text style={styles.error}>{error}</Text>}
-
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Registrarse</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => router.push('/login')}>
-        <Text style={styles.footer}>
-          ¿Ya tienes una cuenta? <Text style={{ fontWeight: 'bold' }}>Inicia sesión</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      style={styles.container}
+    >
+      <View style={styles.topSection}>
+        <View style={styles.backButtonContainer}>
+          <TouchableOpacity style={styles.backButton} onPress={() => router.push('/')}>
+            <Text style={styles.backArrow}>←</Text>
+            <Text style={styles.backText}>Regresar</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.welcome}>Bienvenido!</Text>
+        <Text style={styles.subwelcome}>
+          Regístrate para descubrir nuevas lecturas, conectar con otros lectores y compartir tus libros favoritos.
         </Text>
-      </TouchableOpacity>
-    </View>
+      </View>
+
+      <View style={styles.formContainer}>
+        <Text style={styles.loginTitle}>Registro</Text>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Correo institucional"
+          placeholderTextColor="#999"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Nombre completo"
+          placeholderTextColor="#999"
+          value={fullName}
+          onChangeText={setFullName}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Contraseña"
+          placeholderTextColor="#999"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Confirmar contraseña"
+          placeholderTextColor="#999"
+          secureTextEntry
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+        />
+
+        {error !== '' && <Text style={styles.error}>{error}</Text>}
+
+        <TouchableOpacity style={styles.button} onPress={handleRegister}>
+          <Text style={styles.buttonText}>Registrarse</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.signup}>
+          ¿Ya tienes una cuenta?{' '}
+          <Text style={styles.signupLink} onPress={() => router.push('/login')}>
+            Inicia sesión
+          </Text>
+        </Text>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 30,
     flex: 1,
-    backgroundColor: 'white',
-    justifyContent: 'center',
+    backgroundColor: '#E0F2F1',
   },
-  back: {
+  topSection: {
+    backgroundColor: '#00796B',
+    padding: 40,
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
+    position: 'relative',
+  },
+  backButtonContainer: {
+    marginTop: Platform.OS === 'ios' ? 60 : 40,
+    backgroundColor: 'transparent',
+  },
+  backButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  backArrow: {
+    fontSize: 18,
+    color: '#fff',
+    marginRight: 5,
     marginBottom: 20,
-    fontSize: 14,
-    color: '#555',
   },
-  title: {
+  backText: {
+    fontSize: 16,
+    color: '#fff',
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  welcome: {
+    color: 'white',
     fontSize: 32,
     fontWeight: 'bold',
-    marginBottom: 24,
   },
-  label: {
+  subwelcome: {
+    color: 'white',
+    fontSize: 15,
+    marginTop: 5,
+    marginRight: 80,
+  },
+  plantImage: {
+    width: 180,
+    height: 140,
+    position: 'absolute',
+    right: 70,
+    bottom: -40,
+    zIndex: -1,
+  },
+  formContainer: {
+    backgroundColor: '#fff',
+    marginTop: 60,
+    marginHorizontal: 20,
+    borderRadius: 20,
+    padding: 20,
+    elevation: 4,
+  },
+  loginTitle: {
+    fontSize: 24,
     fontWeight: 'bold',
-    marginTop: 10,
+    color: '#004D40',
+    marginBottom: 20,
+    textAlign: 'center',
   },
   input: {
-    backgroundColor: '#ddd',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    marginTop: 4,
+    backgroundColor: '#F0F0F0',
+    padding: 15,
+    borderRadius: 12,
+    marginBottom: 10,
   },
   error: {
     color: 'red',
-    marginTop: 10,
+    marginBottom: 10,
+    textAlign: 'center',
   },
   button: {
-    backgroundColor: '#333',
-    padding: 12,
-    borderRadius: 5,
-    marginTop: 20,
-    alignItems: 'center'
+    backgroundColor: '#00796B',
+    padding: 15,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 10,
   },
   buttonText: {
-    color: 'white',
-    fontWeight: 'bold'
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
-  footer: {
-    marginTop: 20,
+  signup: {
     textAlign: 'center',
+    marginTop: 20,
     color: '#555',
+  },
+  signupLink: {
+    color: '#00796B',
+    fontWeight: 'bold',
   },
 });

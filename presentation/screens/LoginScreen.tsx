@@ -57,7 +57,16 @@ export default function LoginScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       style={styles.container}
     >
+      
+
       <View style={styles.topSection}>
+      <View style={styles.backButtonContainer}>
+  <TouchableOpacity style={styles.backButton} onPress={() => router.push('/')}>
+    <Text style={styles.backArrow}>←</Text>
+    <Text style={styles.backText}>Regresar</Text>
+  </TouchableOpacity>
+</View>
+
         <Text style={styles.welcome}>Hola!</Text>
         <Text style={styles.subwelcome}>Inicia sesión para descubrir nuevas lecturas, conectar con otros lectores y darles nueva vida a tus libros.</Text>
         <Image source={require('../../assets/images/plant.png')} style={styles.plantImage} />
@@ -129,6 +138,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginTop: 5,
     alignItems: 'left',
+    marginRight: 200,
   },
   plantImage: {
     width: 180,
@@ -190,4 +200,31 @@ const styles = StyleSheet.create({
     color: '#00796B',
     fontWeight: 'bold',
   },
+
+  backButtonContainer: {
+    marginTop: Platform.OS === 'ios' ? 60 : 40,
+    marginLeft: 0,
+    backgroundColor: "transparent",
+    marginRight: "auto",
+  },
+  
+  backButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  
+  backArrow: {
+    fontSize: 18,
+    color: '#ffff',
+    marginRight: 5,
+    marginBottom: 20,
+  },
+  
+  backText: {
+    fontSize: 16,
+    color: '#ffff',
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  
 });
