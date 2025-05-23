@@ -58,7 +58,6 @@ export default function LoginScreen() {
         {/*<TouchableOpacity onPress={() => {}}>
           <Text style={styles.forgot}>¿Olvidaste tu contraseña?</Text>
         </TouchableOpacity>*/}
-        
 
         {error !== '' && <Text style={styles.error}>{error}</Text>}
 
@@ -100,6 +99,11 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     alignItems: 'left',
+  },
+  back: {
+    marginBottom: 20,
+    fontSize: 14,
+    color: 'white',
   },
   subwelcome: {
     color: 'white',
