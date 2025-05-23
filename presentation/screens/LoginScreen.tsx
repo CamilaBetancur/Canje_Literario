@@ -57,8 +57,7 @@ export default function LoginScreen() {
 
         {/*<TouchableOpacity onPress={() => {}}>
           <Text style={styles.forgot}>¿Olvidaste tu contraseña?</Text>
-        </TouchableOpacity>
-        */}
+        </TouchableOpacity>*/}
         
 
         {error !== '' && <Text style={styles.error}>{error}</Text>}
