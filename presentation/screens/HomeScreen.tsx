@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 8,
   },
   message: {
     fontSize: 16,
