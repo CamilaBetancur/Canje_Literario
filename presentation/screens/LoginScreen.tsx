@@ -1,6 +1,15 @@
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import {Image, KeyboardAvoidingView,Platform,StyleSheet,Text,TextInput,TouchableOpacity,View,} from 'react-native';
+import {
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { loginUserUseCase } from '../../application/usecases/loginUserUseCase';
 
 export default function LoginScreen() {
@@ -99,21 +108,11 @@ const styles = StyleSheet.create({
     alignItems: 'left',
     position: 'relative',
   },
-  back: {
-    marginBottom: 20,
-    fontSize: 14,
-    color: 'white',
-  },
   welcome: {
     color: 'white',
     fontSize: 32,
     fontWeight: 'bold',
     alignItems: 'left',
-  },
-  back: {
-    marginBottom: 20,
-    fontSize: 14,
-    color: 'white',
   },
   subwelcome: {
     color: 'white',
