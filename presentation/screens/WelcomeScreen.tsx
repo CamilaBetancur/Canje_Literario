@@ -8,30 +8,35 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import lam from '../../assets/images/logocanje.png'; // logo de Canje Literario
+import lam from '../../assets/images/logocanje.png';
 
 const WelcomeScreen = () => {
   const router = useRouter();
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container}> 
+      {/* Parte superior: Logo */}
       <View style={styles.topSection}>
         <Image source={lam} style={styles.logo} contentFit="contain" />
+      </View>
+
+      {/* Parte inferior: Texto + botones */}
+      <View style={styles.bottomSection}>
         <Text style={styles.title}>¡Bienvenido a Canje Literario!</Text>
         <Text style={styles.subtitle}>
           Intercambia, descubre y conecta con lectores como tú. {'\n'}
           ¡Tu próxima historia ya está en otra estantería!
         </Text>
-      </View>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => router.push('/login')}>
-          <Text style={styles.buttonText}>Iniciar Sesión</Text>
-        </TouchableOpacity>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.darkButton} onPress={() => router.push('/login')}>
+            <Text style={styles.darkButtonText}>Iniciar Sesión</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={() => router.push('/register')}>
-          <Text style={styles.buttonText}>Registrarse</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.lightButton} onPress={() => router.push('/register')}>
+            <Text style={styles.lightButtonText}>Registrarse</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -42,52 +47,66 @@ export default WelcomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E0F2F1',
+    backgroundColor: '#FFFFFF',
   },
   topSection: {
-    backgroundColor: '#00796B',
-    padding: 40,
-    paddingTop: Platform.OS === 'ios' ? 80 : 60,
-    borderBottomLeftRadius: 50,
-    borderBottomRightRadius: 50,
+    flex: 1.5,
+    justifyContent: 'center',
     alignItems: 'center',
+    paddingTop: Platform.OS === 'ios' ? 80 : 60,
   },
   logo: {
-    width: 120,
-    height: 120,
-    marginBottom: 20,
+    width: 150,
+    height: 150,
+  },
+  bottomSection: {
+    flex: 2,
+    backgroundColor: '#00796B', 
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    padding: 30,
+    justifyContent: 'center',
   },
   title: {
-    color: 'white',
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: 'bold',
+    color: '#fcfffd',
     textAlign: 'center',
     marginBottom: 10,
   },
   subtitle: {
-    color: 'white',
-    fontSize: 16,
+    fontSize: 14,
+    color: '#040404',
     textAlign: 'center',
-    lineHeight: 22,
+    marginBottom: 30,
+    lineHeight: 20,
   },
   buttonContainer: {
-    marginTop: 60,
-    marginHorizontal: 20,
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 20,
-    elevation: 4,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
   },
-  button: {
-    backgroundColor: '#00796B',
-    padding: 15,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginBottom: 15,
+  darkButton: {
+    backgroundColor: '#023436',
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    borderRadius: 25,
   },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+  darkButtonText: {
+    color: '#FFF',
     fontSize: 16,
+    fontWeight: 'bold',
+  },
+  lightButton: {
+    backgroundColor: '#FFF',
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    borderRadius: 25,
+    borderWidth: 1.5,
+    borderColor: '#023436',
+  },
+  lightButtonText: {
+    color: '#023436',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
