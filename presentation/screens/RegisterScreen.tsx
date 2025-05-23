@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {Image, KeyboardAvoidingView,Platform,StyleSheet,Text,TextInput,TouchableOpacity,View,} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { registerUserUseCase } from '../../application/usecases/registerUserUseCase';
 
@@ -23,171 +23,86 @@ export default function RegisterScreen() {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      style={styles.container}
-    >
-      <View style={styles.topSection}>
-        <View style={styles.backButtonContainer}>
-          <TouchableOpacity style={styles.backButton} onPress={() => router.push('/')}>
-            <Text style={styles.backArrow}>←</Text>
-            <Text style={styles.backText}>Regresar</Text>
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.welcome}>Bienvenido!</Text>
-        <Text style={styles.subwelcome}>
-          Regístrate para descubrir nuevas lecturas, conectar con otros lectores y compartir tus libros favoritos.
+    <View style={styles.container}>
+      <TouchableOpacity onPress={() => router.back()}>
+        <Text style={styles.back}>◀ Regresar</Text>
+      </TouchableOpacity>
+
+      <Text style={styles.title}>Registro</Text>
+
+      <Text style={styles.label}>Correo institucional</Text>
+      <TextInput style={styles.input} value={email} onChangeText={setEmail} />
+
+      <Text style={styles.label}>Nombre completo</Text>
+      <TextInput style={styles.input} value={fullName} onChangeText={setFullName} />
+
+      <Text style={styles.label}>Contraseña</Text>
+      <TextInput style={styles.input} secureTextEntry value={password} onChangeText={setPassword} />
+
+      <Text style={styles.label}>Confirmar contraseña</Text>
+      <TextInput style={styles.input} secureTextEntry value={confirmPassword} onChangeText={setConfirmPassword} />
+
+      {error !== '' && <Text style={styles.error}>{error}</Text>}
+
+      <TouchableOpacity style={styles.button} onPress={handleRegister}>
+        <Text style={styles.buttonText}>Registrarse</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => router.push('/login')}>
+        <Text style={styles.footer}>
+          ¿Ya tienes una cuenta? <Text style={{ fontWeight: 'bold' }}>Inicia sesión</Text>
         </Text>
-      </View>
-
-      <View style={styles.formContainer}>
-        <Text style={styles.loginTitle}>Registro</Text>
-
-        <TextInput
-          style={styles.input}
-          placeholder="Correo institucional"
-          placeholderTextColor="#999"
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Nombre completo"
-          placeholderTextColor="#999"
-          value={fullName}
-          onChangeText={setFullName}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Contraseña"
-          placeholderTextColor="#999"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Confirmar contraseña"
-          placeholderTextColor="#999"
-          secureTextEntry
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-        />
-
-        {error !== '' && <Text style={styles.error}>{error}</Text>}
-
-        <TouchableOpacity style={styles.button} onPress={handleRegister}>
-          <Text style={styles.buttonText}>Registrarse</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.signup}>
-          ¿Ya tienes una cuenta?{' '}
-          <Text style={styles.signupLink} onPress={() => router.push('/login')}>
-            Inicia sesión
-          </Text>
-        </Text>
-      </View>
-    </KeyboardAvoidingView>
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    padding: 30,
     flex: 1,
-    backgroundColor: '#E0F2F1',
+    backgroundColor: 'white',
+    justifyContent: 'center',
   },
-  topSection: {
-    backgroundColor: '#00796B',
-    padding: 40,
-    borderBottomLeftRadius: 50,
-    borderBottomRightRadius: 50,
-    position: 'relative',
-  },
-  backButtonContainer: {
-    marginTop: Platform.OS === 'ios' ? 60 : 40,
-    backgroundColor: 'transparent',
-  },
-  backButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  backArrow: {
-    fontSize: 18,
-    color: '#fff',
-    marginRight: 5,
+  back: {
     marginBottom: 20,
+    fontSize: 14,
+    color: '#555',
   },
-  backText: {
-    fontSize: 16,
-    color: '#fff',
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  welcome: {
-    color: 'white',
+  title: {
     fontSize: 32,
     fontWeight: 'bold',
+    marginBottom: 24,
   },
-  subwelcome: {
-    color: 'white',
-    fontSize: 15,
-    marginTop: 5,
-    marginRight: 80,
-  },
-  plantImage: {
-    width: 180,
-    height: 140,
-    position: 'absolute',
-    right: 70,
-    bottom: -40,
-    zIndex: -1,
-  },
-  formContainer: {
-    backgroundColor: '#fff',
-    marginTop: 60,
-    marginHorizontal: 20,
-    borderRadius: 20,
-    padding: 20,
-    elevation: 4,
-  },
-  loginTitle: {
-    fontSize: 24,
+  label: {
     fontWeight: 'bold',
-    color: '#004D40',
-    marginBottom: 20,
-    textAlign: 'center',
+    marginTop: 10,
   },
   input: {
-    backgroundColor: '#F0F0F0',
-    padding: 15,
-    borderRadius: 12,
-    marginBottom: 10,
+    backgroundColor: '#ddd',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    marginTop: 4,
   },
   error: {
     color: 'red',
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  button: {
-    backgroundColor: '#00796B',
-    padding: 15,
-    borderRadius: 12,
-    alignItems: 'center',
     marginTop: 10,
   },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  signup: {
-    textAlign: 'center',
+  button: {
+    backgroundColor: '#333',
+    padding: 12,
+    borderRadius: 5,
     marginTop: 20,
-    color: '#555',
+    alignItems: 'center'
   },
-  signupLink: {
-    color: '#00796B',
-    fontWeight: 'bold',
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold'
+  },
+  footer: {
+    marginTop: 20,
+    textAlign: 'center',
+    color: '#555',
   },
 });
