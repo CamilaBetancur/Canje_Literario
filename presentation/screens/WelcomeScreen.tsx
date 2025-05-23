@@ -6,23 +6,33 @@ import fondo from '../../assets/images/fondooo.jpg';
 import lam from '../../assets/images/logocanje.png';
 import CustomButton from '../../presentation/components/CustomButton';
 
-
 const WelcomeScreen = () => {
   const router = useRouter();
 
   return (
     <View style={styles.container}>
-      <Image source={fondo} style={StyleSheet.absoluteFillObject} contentFit="cover" />
-
-      <View style={styles.content}>
-        <Image source={lam} style={styles.logocanje} contentFit="contain" />
+      {/* Header verde */}
+      <View style={styles.header}>
+        <Image source={lam} style={styles.logo} contentFit="contain" />
+        <Text style={styles.title}>¡Bienvenido a Canje Literario!</Text>
         <Text style={styles.subtitle}>
-          Intercambia, descubre y conecta con lectores como tú.
-          {'\n'}¡Tu próxima historia ya está en otra estantería!
+          Intercambia, descubre y conecta con lectores como tú. {'\n'}
+          ¡Tu próxima historia ya está en otra estantería!
         </Text>
+      </View>
 
-        <CustomButton title="Iniciar Sesión" colorbg="#FFA500" onPress={() => router.push('/login')} />
-        <CustomButton title="Registrarse" colorbg="#FFA500" onPress={() => router.push('/register')} />
+      {/* Contenedor botones */}
+      <View style={styles.buttonContainer}>
+        <CustomButton
+          title="Iniciar Sesión"
+          colorbg="#00796B"
+          onPress={() => router.push('/login')}
+        />
+        <CustomButton
+          title="Registrarse"
+          colorbg="#00796B"
+          onPress={() => router.push('/register')}
+        />
       </View>
     </View>
   );
@@ -33,22 +43,39 @@ export default WelcomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#E0F2F1',
   },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
+  header: {
+    backgroundColor: '#00796B',
+    paddingTop: 60,
+    paddingBottom: 30,
     alignItems: 'center',
-    padding: 20,
+    borderBottomLeftRadius: 40,
+    borderBottomRightRadius: 40,
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 20,
+    color: 'white',
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
   subtitle: {
     textAlign: 'center',
-    marginBottom: 40,
+    color: 'white',
     fontSize: 14,
-    color: '#D4A373',
+    paddingHorizontal: 20,
   },
-  logocanje: {
-    width: 200,
-    height: 200,
-    marginBottom: 20,
+  buttonContainer: {
+    backgroundColor: 'white',
+    margin: 20,
+    padding: 20,
+    borderRadius: 20,
+    gap: 20,
+    elevation: 5,
   },
 });
