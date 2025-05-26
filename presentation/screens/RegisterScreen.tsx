@@ -22,12 +22,13 @@ export default function RegisterScreen() {
 
   const handleRegister = async () => {
     try {
-      await registerUserUseCase(email, fullName, password, confirmPassword);
-      router.push('/success');
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
+      const uid = await registerUserUseCase(email, fullName, password, confirmPassword);
+    console.log('Usuario registrado con UID:', uid);
+    router.push('/success');
+  } catch (err: any) {
+    setError(err.message);
+  }
+};
 
   return (
     <KeyboardAvoidingView
