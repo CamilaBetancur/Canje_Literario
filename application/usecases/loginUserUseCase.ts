@@ -1,5 +1,6 @@
 import { getUserByEmail } from '../../infraestructure/adapters/userAdapter';
 import bcrypt from 'bcryptjs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const loginUserUseCase = async (email: string, password: string) => {
   if (!email || !password) {
@@ -17,5 +18,8 @@ export const loginUserUseCase = async (email: string, password: string) => {
     throw new Error('Credenciales incorrectas');
   }
 
+  // ✅ Guarda el email
+  await AsyncStorage.setItem('loggedInEmail', email);
+  
   return user;
 };

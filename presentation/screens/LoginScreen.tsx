@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { loginUserUseCase } from '../../application/usecases/loginUserUseCase';
 
+
 export default function LoginScreen() {
   const router = useRouter();
   const [email, setEmail] = useState('');
