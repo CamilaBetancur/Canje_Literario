@@ -4,6 +4,8 @@ import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'rea
 import { useRouter } from 'expo-router';
 import BookCard from '../components/BookCard';
 import { getLoggedUserNameUseCase } from '../../application/usecases/getLoggedUserNameUseCase';
+import { collection, getDocs } from 'firebase/firestore';
+import { firestore } from '../../infraestructure/config/firebaseConfig';
 
 const categories = [
   { id: '1', name: 'Acción' },
@@ -12,14 +14,10 @@ const categories = [
   { id: '4', name: 'Fantasía' },
 ];
 
-const mockBooks = [
-  { id: 'b1', title: 'El castillo errante', image: require('../../assets/images/book1.jpg') },
-  { id: 'b2', title: 'Sombras de medianoche', image: require('../../assets/images/book1.jpg') },
-];
-
 export default function HomeScreen() {
   const router = useRouter();
-  const [userName, setUserName] = useState('Usuario'); // ⚠️ Luego reemplazar por usuario logueado
+  const [userName, setUserName] = useState('Usuario');
+  const [books, setBooks] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchUserName = async () => {
@@ -31,7 +29,19 @@ export default function HomeScreen() {
       }
     };
 
+    const fetchBooks = async () => {
+      try {
+        const snapshot = await getDocs(collection(firestore, 'books'));
+
+        const booksData = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        setBooks(booksData);
+      } catch (error) {
+        console.error('Error cargando libros:', error);
+      }
+    };
+
     fetchUserName();
+    fetchBooks();
   }, []);
 
   return (
@@ -49,13 +59,11 @@ export default function HomeScreen() {
         {/* Imagen destacada */}
         <View style={styles.featuredImage}>
           <Image
-          source={require('../../assets/images/baanner.png')} // Usa tu imagen aquí
-          style={styles.featuredImageImage}
-          resizeMode="cover" // o "contain", dependiendo del efecto que busques
+            source={require('../../assets/images/baanner.png')}
+            style={styles.featuredImageImage}
+            resizeMode="cover"
           />
-          </View>
-          
-        
+        </View>
 
         {/* Categorías */}
         <Text style={styles.sectionTitle}>Categorías</Text>
@@ -75,8 +83,8 @@ export default function HomeScreen() {
         {/* Libros recientes */}
         <Text style={styles.sectionTitle}>Libros recientes</Text>
         <View style={styles.booksContainer}>
-          {mockBooks.map((book) => (
-            <BookCard key={book.id} id={book.id} title={book.title} image={book.image} />
+          {books.map((book) => (
+            <BookCard key={book.id} id={book.id} title={book.title} />
           ))}
         </View>
       </ScrollView>
