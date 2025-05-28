@@ -21,8 +21,8 @@ export default function BookCard({ id, title }: Props) {
 
 const styles = StyleSheet.create({
   card: {
-    width: '48%',
-    height: 140,
+    width: '20%',
+    height: 170,
     marginBottom: 16,
   },
   bookShape: {
