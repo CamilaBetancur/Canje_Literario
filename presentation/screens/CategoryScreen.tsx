@@ -10,6 +10,13 @@ export default function CategoryScreen() {
   const router = useRouter();
   const [books, setBooks] = useState<any[]>([]);
 
+  const bannerImages: any = {
+    acción: require('../../assets/images/accionbanner.png'),
+    romance: require('../../assets/images/romancebanner.png'),
+    terror: require('../../assets/images/terrorbanner.png'),
+    fantasía: require('../../assets/images/fantasybanner.png'),
+  };
+
   useEffect(() => {
     const fetchBooksByCategory = async () => {
       try {
@@ -31,24 +38,23 @@ export default function CategoryScreen() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-        {/* Encabezado con botón de regreso */}
+        {/* Encabezado */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.push('/home')}>
             <Text style={styles.backText}>←</Text>
           </TouchableOpacity>
-
-          <Text style={styles.categoryTitle}>{String(nombre).charAt(0).toUpperCase() + String(nombre).slice(1)}</Text>
-
-          <Image source={require('../../assets/images/logocanje.png')} style={styles.avatar} />
+          <Text style={styles.categoryTitle}>
+            {String(nombre).charAt(0).toUpperCase() + String(nombre).slice(1)}
+          </Text>
+          <Image source={require('../../assets/images/logocanje.png')} style={styles.logo} />
         </View>
 
-        {/* Subtexto */}
-        <Text style={styles.subText}>Hoy es un buen día para compartir</Text>
+       
 
         {/* Banner */}
         <View style={styles.bannerContainer}>
           <Image
-            source={require('../../assets/images/homebanner.png')}
+            source={bannerImages[nombre as string] || require('../../assets/images/homebanner.png')}
             style={styles.bannerImage}
             resizeMode="cover"
           />
@@ -57,27 +63,36 @@ export default function CategoryScreen() {
         {/* Título */}
         <Text style={styles.sectionTitle}>Todos los libros</Text>
 
-        {/* Libros filtrados */}
+        {/* Lista de libros */}
         <View style={styles.booksContainer}>
           {books.map((book) => (
-            <BookCard key={book.id} id={book.id} title={book.title} />
+            <BookCard
+              key={book.id}
+              id={book.id}
+              title={book.title}
+              author={book.author}
+            />
           ))}
         </View>
       </ScrollView>
 
       {/* Menú inferior */}
       <View style={styles.bottomNav}>
-        <TouchableOpacity onPress={() => router.push('/home')}>
-          <Text style={styles.navItem}>Inicio</Text>
+        <TouchableOpacity onPress={() => router.push('/home')} style={styles.navItem}>
+          <Image source={require('../../assets/images/home.png')} style={styles.navIcon} />
+          <Text style={styles.navText}>Inicio</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push('/add')}>
-          <Text style={styles.navItem}>Agregar</Text>
+        <TouchableOpacity onPress={() => router.push('/add')} style={styles.navItem}>
+          <Image source={require('../../assets/images/add.png')} style={styles.navIcon} />
+          <Text style={styles.navText}>Agregar</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push('/foro')}>
-          <Text style={styles.navItem}>Foro</Text>
+        <TouchableOpacity onPress={() => router.push('/foro')} style={styles.navItem}>
+          <Image source={require('../../assets/images/foro.png')} style={styles.navIcon} />
+          <Text style={styles.navText}>Foro</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push('/profile')}>
-          <Text style={styles.navItem}>Perfil</Text>
+        <TouchableOpacity onPress={() => router.push('/profile')} style={styles.navItem}>
+          <Image source={require('../../assets/images/user.png')} style={styles.navIcon} />
+          <Text style={styles.navText}>Perfil</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -85,44 +100,59 @@ export default function CategoryScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  scrollContainer: { padding: 16, paddingBottom: 100 },
+  container: { flex: 1, backgroundColor: '#E0F2F1' },
+  scrollContainer: { padding: 20, paddingBottom: 140 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  backText: { fontSize: 24, color: '#333' },
-  categoryTitle: { fontSize: 20, fontWeight: 'bold' },
-  avatar: { width: 40, height: 40, backgroundColor: '#ccc' },
-  subText: { color: '#555', fontSize: 12, marginVertical: 8 },
+  backText: { fontSize: 28, color: '#004D40' },
+  categoryTitle: { fontSize: 22, fontWeight: 'bold', color: '#004D40' },
+  logo: { width: 80, height: 80 },
+  subText: { color: '#555', fontSize: 13, marginVertical: 10 },
   bannerContainer: {
-    height: 140,
+    height: 160,
     width: '100%',
-    borderRadius: 12,
-    marginBottom: 16,
+    borderRadius: 16,
     overflow: 'hidden',
+    marginBottom: 20,
   },
   bannerImage: { width: '100%', height: '100%' },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 8,
+    color: '#004D40',
+    marginBottom: 12,
   },
   booksContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    
+    gap: 12,
   },
   bottomNav: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    height: 60,
-    backgroundColor: '#333',
+    height: 70,
+    backgroundColor: '#00796B',
     position: 'absolute',
     bottom: 0,
     width: '100%',
+    paddingHorizontal: 16,
   },
-  navItem: { color: '#fff' },
+  navItem: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  navIcon: {
+    width: 24,
+    height: 24,
+    marginBottom: 4,
+  },
+  navText: {
+    color: '#fff',
+    fontSize: 12,
+  },
 });
