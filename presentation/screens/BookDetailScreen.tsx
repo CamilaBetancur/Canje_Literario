@@ -5,11 +5,13 @@ import { doc, getDoc } from 'firebase/firestore';
 import { firestore } from '../../infraestructure/config/firebaseConfig';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { getUserByUid } from '../../infraestructure/adapters/userAdapter';
 
 export default function BookDetailScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const [book, setBook] = useState<any>(null);
+  const [userFullName, setUserFullName] = useState<string>('');
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -18,7 +20,15 @@ export default function BookDetailScreen() {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          setBook({ id: docSnap.id, ...docSnap.data() });
+          const bookData = { id: docSnap.id, ...docSnap.data() };
+          setBook(bookData);
+
+          // Obtener nombre del usuario que ofertó el libro
+          if (bookData.userId) {
+            const userDoc = await getUserByUid(bookData.userId);
+            const fullName = userDoc?.fullName || 'Desconocido';
+            setUserFullName(fullName);
+          }
         }
       } catch (error) {
         console.error('Error obteniendo el libro:', error);
@@ -63,7 +73,8 @@ export default function BookDetailScreen() {
         <Text style={styles.detailText}>Autor: {book.author}</Text>
         <Text style={styles.detailText}>Publicado: {formattedDate}</Text>
         <Text style={styles.detailText}>Descripción: {book.description}</Text>
-
+        <Text style={styles.detailText}>Ofertado por: {userFullName}</Text>
+        
         {/* Botón solicitar intercambio */}
         <TouchableOpacity style={styles.exchangeButton} onPress={() => router.push('/successintercambio')}>
           <Text style={styles.exchangeButtonText}>Solicitar intercambio</Text>
