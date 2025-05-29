@@ -50,10 +50,14 @@ export default function ProfileScreen() {
         {/* Sección de libros publicados */}
         <Text style={styles.sectionTitle}>Mis libros publicados</Text>
         <View style={styles.booksContainer}>
-          {userBooks.map(book => (
+          {userBooks.length === 0 ? (
+            <Text style={styles.noBooksText}>Aún no has publicado ningún libro.</Text>
+          ) : (
+            userBooks.map(book => (
             <BookCard key={book.id} id={book.id} title={book.title} />
-          ))}
-        </View>
+          ))
+          )}
+          </View>
       </ScrollView>
 
       {/* Menú inferior */}
@@ -85,6 +89,12 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     marginRight: 12,
+  },
+  noBooksText: {
+    fontStyle: 'italic',
+    color: '#999',
+    textAlign: 'center',
+    marginTop: 12,
   },
   userName: {
     fontSize: 18,
