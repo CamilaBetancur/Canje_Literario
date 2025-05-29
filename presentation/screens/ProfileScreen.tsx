@@ -1,64 +1,60 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getUserByEmail } from '../../infraestructure/adapters/userAdapter';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { firestore } from '../../infraestructure/config/firebaseConfig';
+import BookCard from '../components/BookCard';
+import { getCurrentUserId, getUserByUid } from '../../infraestructure/adapters/userAdapter';
 
 export default function ProfileScreen() {
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
   const router = useRouter();
+  const [userName, setUserName] = useState('');
+  const [userBooks, setUserBooks] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const storedEmail = await AsyncStorage.getItem('loggedInEmail');
-        if (!storedEmail) {
-          console.warn('No hay email almacenado');
-          return;
-        }
+    const fetchUserData = async () => {
+      const uid = await getCurrentUserId();
+      if (!uid) return;
 
-        const user = await getUserByEmail(storedEmail);
-        if (user) {
-          setFullName(user.fullName);
-          setEmail(user.email);
-        }
-      } catch (error) {
-        console.error('Error obteniendo datos del usuario:', error);
-      }
+      const user = await getUserByUid(uid);
+      setUserName(user?.fullName || '');
+
+      const booksRef = collection(firestore, 'books');
+      const q = query(booksRef, where('userId', '==', uid));
+      const querySnapshot = await getDocs(q);
+
+      const books = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setUserBooks(books);
     };
 
-    fetchUser();
+    fetchUserData();
   }, []);
-
-  const handleLogout = async () => {
-    try {
-      await AsyncStorage.removeItem('loggedInEmail');
-      router.replace('/'); // Te lleva al WelcomeScreen (ruta raíz)
-    } catch (error) {
-      console.error('Error cerrando sesión:', error);
-    }
-  };
 
   return (
     <View style={styles.container}>
-      {/* Avatar */}
-      <View style={styles.avatarContainer}>
-        <Image source={require('../../assets/images/avatar.webp')} style={styles.avatar} />
-      </View>
+      <ScrollView contentContainerStyle={styles.content}>
+        {/* Encabezado con avatar y nombre */}
+        <View style={styles.header}>
+          <Image source={require('../../assets/images/avatar.webp')} style={styles.avatar} />
+          <Text style={styles.userName}>{userName}</Text>
+        </View>
 
-      {/* Nombre del usuario */}
-      <Text style={styles.label}>Nombre de usuario:</Text>
-      <Text style={styles.value}>{fullName}</Text>
+        {/* Botón de configuración */}
+        <TouchableOpacity style={styles.configButton} onPress={() => router.push('/settings')}>
+          <Text style={styles.configText}>Configuración &gt;</Text>
+        </TouchableOpacity>
 
-      {/* Correo */}
-      <Text style={styles.label}>Correo actual:</Text>
-      <Text style={styles.value}>{email}</Text>
-
-      {/* Botón cerrar sesión */}
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutButtonText}>Cerrar sesión</Text>
-      </TouchableOpacity>
+        {/* Sección de libros publicados */}
+        <Text style={styles.sectionTitle}>Mis libros publicados</Text>
+        <View style={styles.booksContainer}>
+          {userBooks.map(book => (
+            <BookCard key={book.id} id={book.id} title={book.title} />
+          ))}
+        </View>
+      </ScrollView>
 
       {/* Menú inferior */}
       <View style={styles.bottomNav}>
@@ -77,38 +73,40 @@ export default function ProfileScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff', padding: 20, paddingBottom: 100 },
-  avatarContainer: {
+  container: { flex: 1, backgroundColor: '#fff' },
+  content: { padding: 16, paddingBottom: 100 },
+  header: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 20,
+    marginBottom: 16,
   },
   avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: '#ccc',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 12,
   },
-  label: {
-    fontSize: 16,
-    color: '#666',
-    marginTop: 20,
-  },
-  value: {
+  userName: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#222',
-    marginTop: 4,
   },
-  logoutButton: {
-    backgroundColor: '#d32f2f',
-    padding: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 40,
+  configButton: {
+    marginBottom: 20,
   },
-  logoutButtonText: {
-    color: '#fff',
+  configText: {
+    color: '#6a1b9a',
     fontWeight: 'bold',
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
+  booksContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    gap: 10,
   },
   bottomNav: {
     flexDirection: 'row',
@@ -122,6 +120,5 @@ const styles = StyleSheet.create({
   },
   navItem: {
     color: '#fff',
-    fontWeight: 'bold',
   },
 });
