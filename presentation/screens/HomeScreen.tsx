@@ -96,7 +96,7 @@ export default function HomeScreen() {
         <Text style={styles.sectionTitle}>Libros recientes</Text>
         <View style={styles.booksContainer}>
           {books.map((book) => (
-            <BookCard key={book.id} id={book.id} title={book.title} />
+            <BookCard key={book.id} id={book.id} title={book.title} author={book.author} />
           ))}
         </View>
       </ScrollView>
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   booksContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    
     gap: 12,
   },
   bookCardWrapper: {
