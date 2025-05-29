@@ -1,17 +1,25 @@
+// app/formulariointercambio.tsx
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  ScrollView,
+} from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { doc, getDoc } from 'firebase/firestore';
 import { firestore } from '../../infraestructure/config/firebaseConfig';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
 import { getUserByUid } from '../../infraestructure/adapters/userAdapter';
 
-export default function BookDetailScreen() {
-  const { id } = useLocalSearchParams();
+export default function FormularioIntercambio() {
+  const { id } = useLocalSearchParams(); // id del libro
   const router = useRouter();
   const [book, setBook] = useState<any>(null);
-  const [userFullName, setUserFullName] = useState<string>('');
+  const [userFullName, setUserFullName] = useState('');
+  const [mensaje, setMensaje] = useState('');
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -23,7 +31,6 @@ export default function BookDetailScreen() {
           const bookData = { id: docSnap.id, ...docSnap.data() };
           setBook(bookData);
 
-          // Obtener nombre del usuario que ofertó el libro
           if (bookData.userId) {
             const userDoc = await getUserByUid(bookData.userId);
             const fullName = userDoc?.fullName || 'Desconocido';
@@ -31,7 +38,7 @@ export default function BookDetailScreen() {
           }
         }
       } catch (error) {
-        console.error('Error obteniendo el libro:', error);
+        console.error('Error al obtener el libro:', error);
       }
     };
 
@@ -41,14 +48,10 @@ export default function BookDetailScreen() {
   if (!book) {
     return (
       <View style={styles.loadingContainer}>
-        <Text>Cargando libro...</Text>
+        <Text>Cargando...</Text>
       </View>
     );
   }
-
-  const formattedDate = book.createdAt?.toDate
-    ? format(book.createdAt.toDate(), "d 'de' MMMM yyyy", { locale: es })
-    : '';
 
   return (
     <View style={styles.container}>
@@ -58,30 +61,40 @@ export default function BookDetailScreen() {
           <TouchableOpacity onPress={() => router.back()}>
             <Text style={styles.backText}>←</Text>
           </TouchableOpacity>
-          <Image source={require('../../assets/images/logocanje.png')} style={styles.avatar} />
+          <Image
+            source={require('../../assets/images/logocanje.png')}
+            style={styles.avatar}
+          />
         </View>
 
-        {/* Imagen del libro con el nombre del autor encima */}
+        {/* Imagen del libro */}
         <View style={styles.bookImageContainer}>
           <View style={styles.bookImage}>
-            <Text style={styles.authorOnImage}>{book.author}</Text>
+            <Text style={styles.bookTitle}>{book.title}</Text>
+            <Text style={styles.bookAuthor}>{book.author}</Text>
           </View>
         </View>
 
-        {/* Detalles del libro */}
-        <Text style={styles.title}>{book.title}</Text>
-        <Text style={styles.detailText}>Autor: {book.author}</Text>
-        <Text style={styles.detailText}>Publicado: {formattedDate}</Text>
-        <Text style={styles.detailText}>Descripción: {book.description}</Text>
-        <Text style={styles.detailText}>Ofertado por: {userFullName}</Text>
-        
-        {/* Botón solicitar intercambio */}
+        {/* Ofrecido por */}
+        <Text style={styles.offerText}>Ofrecido por: {userFullName}</Text>
+
+        {/* Comentario */}
+        <Text style={styles.label}>Comentario</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Escribe tu mensaje..."
+          value={mensaje}
+          onChangeText={setMensaje}
+          multiline
+        />
+
+        {/* Botón de enviar */}
         <TouchableOpacity
-        style={styles.exchangeButton}
-        onPress={() => router.push(`/formulariointercambio?id=${book.id}`)}
+          style={styles.sendButton}
+          onPress={() => router.push('/successintercambio')}
         >
-          <Text style={styles.exchangeButtonText}>Solicitar intercambio</Text>
-          </TouchableOpacity>
+          <Text style={styles.sendButtonText}>Enviar solicitud</Text>
+        </TouchableOpacity>
       </ScrollView>
 
       {/* Menú inferior */}
@@ -109,48 +122,57 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
   },
-  backText: {
-    fontSize: 24,
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-  },
-  bookImageContainer: {
-    alignItems: 'center',
-    marginBottom: 16,
-  },
+  backText: { fontSize: 24 },
+  avatar: { width: 40, height: 40 },
+  bookImageContainer: { alignItems: 'center', marginBottom: 16 },
   bookImage: {
-    width: 120,
-    height: 180,
+    width: 150,
+    height: 220,
     backgroundColor: '#d1c4e9',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 8,
   },
-  authorOnImage: {
-    color: '#333',
+  bookTitle: {
+    fontSize: 16,
     fontWeight: 'bold',
+    color: '#333',
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+  bookAuthor: {
+    fontSize: 14,
+    color: '#555',
     textAlign: 'center',
   },
-  title: {
-    fontSize: 20,
+  offerText: {
+    fontSize: 14,
+    marginBottom: 12,
+    color: '#333',
+  },
+  label: {
+    fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 8,
-  },
-  detailText: {
-    fontSize: 14,
-    marginBottom: 6,
     color: '#444',
   },
-  exchangeButton: {
-    backgroundColor: '#6a1b9a',
+  input: {
+    height: 100,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
     padding: 12,
+    textAlignVertical: 'top',
+    marginBottom: 16,
+  },
+  sendButton: {
+    backgroundColor: '#6a1b9a',
+    padding: 14,
     borderRadius: 8,
     alignItems: 'center',
-    marginTop: 20,
   },
-  exchangeButtonText: {
+  sendButtonText: {
     color: '#fff',
     fontWeight: 'bold',
   },
