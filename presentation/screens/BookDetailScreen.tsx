@@ -92,9 +92,13 @@ export default function BookDetailScreen() {
         <TouchableOpacity onPress={() => router.push('/add')}>
           <Text style={styles.navItem}>Agregar</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push('/foro')}>
+          <Text style={styles.navItem}>Foro</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => router.push('/profile')}>
           <Text style={styles.navItem}>Perfil</Text>
         </TouchableOpacity>
+        
       </View>
     </View>
   );
