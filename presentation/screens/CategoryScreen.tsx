@@ -48,7 +48,7 @@ export default function CategoryScreen() {
         {/* Banner */}
         <View style={styles.bannerContainer}>
           <Image
-            source={require('../../assets/images/baanner.png')}
+            source={require('../../assets/images/homebanner.png')}
             style={styles.bannerImage}
             resizeMode="cover"
           />
@@ -79,7 +79,6 @@ export default function CategoryScreen() {
         <TouchableOpacity onPress={() => router.push('/profile')}>
           <Text style={styles.navItem}>Perfil</Text>
         </TouchableOpacity>
-        
       </View>
     </View>
   );
