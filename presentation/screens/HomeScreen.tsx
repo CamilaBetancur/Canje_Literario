@@ -53,7 +53,9 @@ export default function HomeScreen() {
             <Text style={styles.greeting}>Hola, {userName}</Text>
             <Text style={styles.subText}>Hoy es un buen día para compartir</Text>
           </View>
-          <Image source={require('../../assets/images/logocanje.png')} style={styles.avatar} />
+          <TouchableOpacity onPress={() => router.push('/notifications')}>
+            <Text style={styles.avatar}>Notificaciones</Text>
+            </TouchableOpacity>
         </View>
 
         {/* Imagen destacada */}
