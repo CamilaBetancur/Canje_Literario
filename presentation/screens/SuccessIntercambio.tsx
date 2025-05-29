@@ -1,15 +1,19 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 
 export default function SuccessIntercambio() {
   const router = useRouter();
 
   const goToHome = () => {
-    router.replace('/(tabs)/home'); // Reemplaza la pantalla actual por la de inicio
+    router.replace('/(tabs)/home');
   };
 
   return (
     <View style={styles.container}>
+      <Image
+        source={require('../../assets/images/sucesss.png')} // Asegúrate de tener este ícono (puede ser un check verde)
+        style={styles.successIcon}
+      />
       <Text style={styles.title}>¡Solicitud enviada!</Text>
       <Text style={styles.subtitle}>
         Tu propuesta de intercambio ya fue enviada al usuario.
@@ -17,6 +21,7 @@ export default function SuccessIntercambio() {
       <Text style={styles.footerText}>
         Ahora solo queda esperar que acepte...
       </Text>
+
       <TouchableOpacity style={styles.button} onPress={goToHome}>
         <Text style={styles.buttonText}>Volver al inicio</Text>
       </TouchableOpacity>
@@ -27,39 +32,48 @@ export default function SuccessIntercambio() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#E0F2F1',
     padding: 24,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  successIcon: {
+    width: 100,
+    height: 100,
+    marginBottom: 24,
+    resizeMode: 'contain',
+  },
   title: {
-    fontSize: 26,
+    fontSize: 40,
     fontWeight: 'bold',
-    marginBottom: 12,
+    color: '#004D40',
     textAlign: 'center',
+    marginBottom: 12,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 24,
     textAlign: 'center',
-    marginBottom: 24,
+    color: '#004D40',
+    marginBottom: 16,
     paddingHorizontal: 10,
   },
   footerText: {
-    fontSize: 14,
+    fontSize: 20,
     textAlign: 'center',
-    color: '#666',
-    marginTop: 20,
+    color: '#00695C',
+    marginTop: 10,
     marginBottom: 30,
     paddingHorizontal: 10,
   },
   button: {
-    backgroundColor: '#3b82f6', // azul
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 8,
+    backgroundColor: '#00796B',
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    borderRadius: 10,
+    elevation: 2,
   },
   buttonText: {
-    color: '#fff',
+    color: '#ffffff',
     fontWeight: 'bold',
     fontSize: 16,
   },
