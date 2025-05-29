@@ -1,68 +1,86 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 
 export default function SuccessScreen() {
   const router = useRouter();
 
+  const goToLogin = () => {
+    router.replace('/login');
+  };
+
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
+        <Image
+          source={require('../../assets/images/sucesss.png')} // usa el mismo ícono
+          style={styles.successIcon}
+        />
+
         <Text style={styles.title}>¡Listo!</Text>
+
         <Text style={styles.subtitle}>
           Explora, intercambia y deja que las historias encuentren nuevos caminos.
         </Text>
-      </View>
 
-      <View style={styles.footer}>
-        <Text style={styles.note}>¡Ya casi! Inicia sesión para comenzar a rodar tus libros.</Text>
-        <TouchableOpacity style={styles.button} onPress={() => router.push('/login')}>
+        <Text style={styles.note}>
+          ¡Ya casi! Inicia sesión para comenzar a rodar tus libros.
+        </Text>
+
+        <TouchableOpacity style={styles.button} onPress={goToLogin}>
           <Text style={styles.buttonText}>Iniciar Sesión</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'space-between',
-    padding: 40,
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    backgroundColor: '#E0F2F1',
+    padding: 24,
   },
-  content: {
-    marginTop: '40%',
+  container: {
     alignItems: 'center',
+  },
+  successIcon: {
+    width: 100,
+    height: 100,
+    marginBottom: 24,
+    resizeMode: 'contain',
   },
   title: {
-    fontSize: 50,
-    fontWeight: '900',
-    fontFamily: 'System',
+    fontSize: 40,
+    fontWeight: 'bold',
+    color: '#004D40',
+    textAlign: 'center',
+    marginBottom: 12,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 18,
     textAlign: 'center',
-    marginTop: 12,
-    color: '#000',
-    fontFamily: 'System',
-  },
-  footer: {
-    alignItems: 'center',
+    color: '#004D40',
+    marginBottom: 24,
+    paddingHorizontal: 10,
   },
   note: {
-    fontSize: 12,
-    color: '#555',
-    marginBottom: 10,
+    fontSize: 16,
     textAlign: 'center',
+    color: '#00695C',
+    marginBottom: 20,
+    paddingHorizontal: 10,
   },
   button: {
-    backgroundColor: '#ddd',
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    borderRadius: 5,
+    backgroundColor: '#00796B',
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    borderRadius: 10,
+    elevation: 2,
   },
   buttonText: {
+    color: '#ffffff',
     fontWeight: 'bold',
     fontSize: 16,
   },
