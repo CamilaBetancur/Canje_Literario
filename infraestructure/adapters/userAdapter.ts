@@ -17,6 +17,17 @@ export const getCurrentUserId = async (): Promise<string | null> => {
   }
 };
 
+export const getUserByUid = async (uid: string) => {
+  const docRef = doc(firestore, 'users', uid);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    return docSnap.data();
+  }
+
+  return null;
+};
+
 export const getUserByEmail = async (email: string) => {
   const usersRef = collection(firestore, 'users');
   const q = query(usersRef, where('email', '==', email));
