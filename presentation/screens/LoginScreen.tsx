@@ -45,7 +45,7 @@ export default function LoginScreen() {
   </TouchableOpacity>
 </View>
 
-        <Text style={styles.welcome}>Hola!</Text>
+        <Text style={styles.welcome}>¡Hola!</Text>
         <Text style={styles.subwelcome}>Inicia sesión para descubrir nuevas lecturas, conectar con otros lectores y darles nueva vida a tus libros.</Text>
         <Image source={require('../../assets/images/plant.png')} style={styles.plantImage} />
       </View>

@@ -42,7 +42,7 @@ export default function RegisterScreen() {
             <Text style={styles.backText}>Regresar</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.welcome}>Bienvenido!</Text>
+        <Text style={styles.welcome}>¡Bienvenido!</Text>
         <Text style={styles.subwelcome}>
           Regístrate para descubrir nuevas lecturas, conectar con otros lectores y compartir tus libros favoritos.
         </Text>

@@ -54,32 +54,42 @@ export default function HomeScreen() {
             <Text style={styles.subText}>Hoy es un buen día para compartir</Text>
           </View>
           <TouchableOpacity onPress={() => router.push('/notifications')}>
-            <Text style={styles.avatar}>Notificaciones</Text>
+          <View style={[styles.avatar, { borderRadius: 20, width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }]}>
+            <Text style={{ fontSize: 18 }}>🔔</Text>
+            </View>
             </TouchableOpacity>
         </View>
 
         {/* Imagen destacada */}
         <View style={styles.featuredImage}>
           <Image
-            source={require('../../assets/images/baanner.png')}
+            source={require('../../assets/images/homebanner.png')}
             style={styles.featuredImageImage}
             resizeMode="cover"
           />
         </View>
 
-        {/* Categorías */}
         <Text style={styles.sectionTitle}>Categorías</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
-          {categories.map((cat) => (
-            <TouchableOpacity
-              key={cat.id}
-              style={styles.categoryCard}
-              onPress={() => router.push(`/category/${cat.name.toLowerCase()}`)}
-            >
-              <View style={styles.categoryIcon} />
-              <Text style={styles.categoryText}>{cat.name}</Text>
-            </TouchableOpacity>
-          ))}
+          {categories.map((cat) => {
+            let imagePath = require('../../assets/images/action.png'); // Cambia esto por cada categoría
+
+            if (cat.name === 'Acción') imagePath = require('../../assets/images/action.png');
+            if (cat.name === 'Terror') imagePath = require('../../assets/images/terror.png');
+            if (cat.name === 'Romance') imagePath = require('../../assets/images/romance.png');
+            if (cat.name === 'Fantasía') imagePath = require('../../assets/images/fantasy.png');
+
+            return (
+              <TouchableOpacity
+                key={cat.id}
+                style={styles.categoryCard}
+                onPress={() => router.push(`/category/${cat.name.toLowerCase()}`)}
+              >
+                <Image source={imagePath} style={styles.categoryIcon} />
+                <Text style={styles.categoryText}>{cat.name}</Text>
+              </TouchableOpacity>
+            );
+          })}
         </ScrollView>
 
         {/* Libros recientes */}
@@ -93,19 +103,22 @@ export default function HomeScreen() {
 
       {/* Menú inferior */}
       <View style={styles.bottomNav}>
-        <TouchableOpacity onPress={() => router.push('/home')}>
-          <Text style={styles.navItem}>Inicio</Text>
+        <TouchableOpacity onPress={() => router.push('/home')} style={styles.navItem}>
+          <Image source={require('../../assets/images/home.png')} style={styles.navIcon} />
+          <Text style={styles.navText}>Inicio</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push('/add')}>
-          <Text style={styles.navItem}>Agregar</Text>
+        <TouchableOpacity onPress={() => router.push('/add')} style={styles.navItem}>
+          <Image source={require('../../assets/images/add.png')} style={styles.navIcon} />
+          <Text style={styles.navText}>Agregar</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push('/foro')}>
-          <Text style={styles.navItem}>Foro</Text>
+        <TouchableOpacity onPress={() => router.push('/foro')} style={styles.navItem}>
+          <Image source={require('../../assets/images/foro.png')} style={styles.navIcon} />
+          <Text style={styles.navText}>Foro</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push('/profile')}>
-          <Text style={styles.navItem}>Perfil</Text>
+        <TouchableOpacity onPress={() => router.push('/profile')} style={styles.navItem}>
+          <Image source={require('../../assets/images/user.png')} style={styles.navIcon} />
+          <Text style={styles.navText}>Perfil</Text>
         </TouchableOpacity>
-        
       </View>
     </View>
   );
@@ -114,80 +127,117 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#E0F2F1',
   },
   scrollContainer: {
     padding: 16,
     paddingBottom: 100,
   },
   header: {
+    backgroundColor: '#00796B',
+    borderBottomLeftRadius: 40,
+    borderBottomRightRadius: 40,
+    padding: 24,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   greeting: {
-    fontSize: 20,
+    color: 'white',
+    fontSize: 26,
     fontWeight: 'bold',
+    marginBottom: 4,
   },
   subText: {
-    color: '#555',
-    fontSize: 12,
+    color: 'white',
+    fontSize: 14,
   },
   avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 0,
-    backgroundColor: '#ccc',
+    color: '#00796B',
+    backgroundColor: '#fff',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    overflow: 'hidden',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
   featuredImage: {
-    height: 140,
-    width: '100%', // 👉 asegúrate que cubra todo el ancho
-    borderRadius: 12,
-    marginVertical: 16,
-    overflow: 'hidden', // para que el borderRadius funcione con imágenes
+    height: 160,
+    width: '100%',
+    borderRadius: 16,
+    marginTop: 20,
+    overflow: 'hidden',
+    elevation: 4,
+    backgroundColor: '#ccc',
   },
   featuredImageImage: {
     width: '100%',
     height: '100%',
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 8,
+    color: '#004D40',
+    marginTop: 24,
+    marginBottom: 12,
   },
   categoryScroll: {
     marginBottom: 16,
   },
   categoryCard: {
     alignItems: 'center',
-    marginRight: 12,
+    marginRight: 16,
+    backgroundColor: '#B2DFDB',
+    borderRadius: 12,
+    padding: 10,
+    elevation: 3,
   },
   categoryIcon: {
     width: 50,
     height: 50,
-    backgroundColor: '#ccc',
-    borderRadius: 8,
-    marginBottom: 4,
+    backgroundColor: '#004D40',
+    borderRadius: 12,
+    marginBottom: 6,
   },
   categoryText: {
-    fontSize: 12,
+    fontSize: 14,
+    color: '#004D40',
+    fontWeight: 'bold',
   },
   booksContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+    gap: 12,
+  },
+  bookCardWrapper: {
+    width: '40%',
+    marginBottom: 16,
+    height: 400, // 👉 más alto
   },
   bottomNav: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    height: 60,
-    backgroundColor: '#333',
+    height: 70,
+    backgroundColor: '#00796B',
     position: 'absolute',
     bottom: 0,
     width: '100%',
+    paddingHorizontal: 16,
   },
   navItem: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  navIcon: {
+    width: 24,
+    height: 24,
+    marginBottom: 4,
+  },
+  navText: {
     color: '#fff',
+    fontSize: 12,
   },
 });
