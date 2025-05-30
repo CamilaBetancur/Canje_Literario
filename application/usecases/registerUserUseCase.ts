@@ -23,6 +23,8 @@ export const registerUserUseCase = async (
   if (exists) {
     throw new Error('El correo ya está registrado');
   }
+  
+  console.log('Password:', password, typeof password);
 
   const hashedPassword = await bcrypt.hash(password, 10);
 

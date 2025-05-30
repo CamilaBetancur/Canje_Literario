@@ -24,7 +24,7 @@ export default function SuccessScreen() {
         </Text>
 
         <Text style={styles.note}>
-          ¡Ya casi! Inicia sesión para comenzar a rodar tus libros.
+          ¡Ya casi! Inicia sesión para comenzar a canjear tus libros.
         </Text>
 
         <TouchableOpacity style={styles.button} onPress={goToLogin}>
