@@ -109,7 +109,7 @@ export default function HomeScreen() {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router.push('/add')} style={styles.navItem}>
           <Image source={require('../../assets/images/add.png')} style={styles.navIcon} />
-          <Text style={styles.navText}>Agregar</Text>
+          <Text style={styles.navText}>Publicar</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router.push('/foro')} style={styles.navItem}>
           <Image source={require('../../assets/images/foro.png')} style={styles.navIcon} />
