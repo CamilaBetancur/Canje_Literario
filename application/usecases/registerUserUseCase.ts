@@ -11,6 +11,11 @@ export const registerUserUseCase = async (
     throw new Error('Todos los campos son obligatorios');
   }
 
+   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+   if (!emailRegex.test(email)) {
+     throw new Error('Ingrese un correo válido');
+   }
+  
   if (!email.endsWith('@campusucc.edu.co')) {
     throw new Error('El correo debe terminar en @campusucc.edu.co');
   }
