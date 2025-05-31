@@ -61,13 +61,14 @@ export default function HomeScreen() {
         </View>
 
         {/* Imagen destacada */}
-        <View style={styles.featuredImage}>
+        <View style={styles.featuredImageContainer}>
           <Image
             source={require('../../assets/images/homebanner.png')}
-            style={styles.featuredImageImage}
-            resizeMode="cover"
+            style={styles.featuredImage}
+            resizeMode="contain"
           />
         </View>
+
 
         <Text style={styles.sectionTitle}>Categorías</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
@@ -163,17 +164,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   featuredImage: {
-    height: 160,
     width: '100%',
-    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
     marginTop: 20,
-    overflow: 'hidden',
-    elevation: 4,
-    backgroundColor: '#ccc',
+    marginBottom: 12,
   },
+  
   featuredImageImage: {
     width: '100%',
-    height: '100%',
+    height: 180, // Puedes ajustar este valor según la proporción de tu imagen
   },
   sectionTitle: {
     fontSize: 20,
